@@ -7,20 +7,16 @@ import 'views/book_page.dart';
 import 'views/home_page.dart';
 import 'views/prediction_page.dart';
 
-void main() => runApp(
-    const rmiApp()); //funcion que no devuelve nada y ejecuta el primer widget de la aplicacion
+void main() => runApp(const rmiApp());
 
 class rmiApp extends StatelessWidget {
   const rmiApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    //aca se construye lo que contiene el widget principal
     return MaterialApp(
-      //material define un patron de diseno de google
       title: "clienteRMI",
-      home:
-          Inicio(), //indica cual es el widget que se va a mostrar en la pagina de incio
+      home: Inicio(),
     );
   }
 }
@@ -45,11 +41,12 @@ class _InicioState extends State<Inicio> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color(0xFF0D0D17),
+        backgroundColor: const Color(0xFF476BF6),
         title: Center(
           child: Text(
             ' DISTO ',
-            style: TextStyle(fontSize: 30, fontFamily: 'Bungee'),
+            style: TextStyle(
+                fontSize: 30, color: Colors.black, fontFamily: 'Bungee'),
           ),
         ),
       ),
@@ -61,22 +58,19 @@ class _InicioState extends State<Inicio> {
           Icon(
             Icons.home,
             size: 40,
-            color: Color(0xFFF6FAFC),
           ),
           Icon(
             Icons.mic,
             size: 40,
-            color: Color(0xFFF6FAFC),
           ),
           Icon(
             Icons.book,
             size: 40,
-            color: Color(0xFFF6FAFC),
           ),
         ],
-        color: const Color(0xFF14141E),
-        buttonBackgroundColor: const Color(0xFF14141E),
-        backgroundColor: const Color(0xFF0D0D17),
+        color: const Color(0xFF476BF6),
+        buttonBackgroundColor: const Color(0xFF476BF6),
+        backgroundColor: Colors.transparent,
         animationCurve: Curves.easeInOut,
         animationDuration: const Duration(milliseconds: 600),
         onTap: (index) {
