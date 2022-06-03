@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 
+import 'constants.dart';
 import 'views/book_page.dart';
 import 'views/home_page.dart';
 import 'views/prediction_page.dart';
@@ -15,7 +16,7 @@ class rmiApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: "clienteRMI",
+      title: "DISTO",
       home: Inicio(),
     );
   }
@@ -41,12 +42,12 @@ class _InicioState extends State<Inicio> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color(0xFF476BF6),
+        backgroundColor: colorPrimario,
         title: Center(
           child: Text(
             ' DISTO ',
             style: TextStyle(
-                fontSize: 30, color: Colors.black, fontFamily: 'Bungee'),
+                fontSize: 30, color: colorTexto1, fontFamily: 'Bungee'),
           ),
         ),
       ),
@@ -58,21 +59,23 @@ class _InicioState extends State<Inicio> {
           Icon(
             Icons.home,
             size: 40,
+            color: colorSecundario,
           ),
           Icon(
             Icons.mic,
             size: 40,
+            color: colorSecundario,
           ),
           Icon(
             Icons.book,
             size: 40,
+            color: colorSecundario,
           ),
         ],
-        color: const Color(0xFF476BF6),
-        buttonBackgroundColor: const Color(0xFF476BF6),
+        color: colorPrimario,
         backgroundColor: Colors.transparent,
         animationCurve: Curves.easeInOut,
-        animationDuration: const Duration(milliseconds: 600),
+        animationDuration: const Duration(milliseconds: 400),
         onTap: (index) {
           setState(() {
             _page = index;
