@@ -99,7 +99,8 @@ class _PredictionState extends State<PredictionPage> {
         _speech.listen(
           onResult: (val) => setState(() {
             _text = val.recognizedWords;
-            reproducirPalabra(_text);
+            final splitted = _text.split(' ');
+            reproducirPalabra(splitted[splitted.length - 1]);
           }),
         );
       }
