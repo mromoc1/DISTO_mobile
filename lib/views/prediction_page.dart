@@ -1,7 +1,10 @@
-import 'dart:io';
+// ignore_for_file: prefer_const_constructors, annotate_overrides, prefer_final_fields, unused_local_variable
 
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
+import 'package:speech_to_text/speech_to_text.dart' as stt;
+
+import '../constants.dart';
 
 class PredictionPage extends StatefulWidget {
   const PredictionPage({Key? key}) : super(key: key);
@@ -11,13 +14,19 @@ class PredictionPage extends StatefulWidget {
 }
 
 class _PredictionState extends State<PredictionPage> {
-  bool escuchando = false;
-  String _text = 'PALABRA TRANSCRITA';
   final sugerenciaController = TextEditingController();
-  static String newValue = "";
+  late stt.SpeechToText _speech;
+
+  bool escuchando = false;
+  String _text = 'Transcripcion';
+
+  @override
+  void initState() {
+    super.initState();
+    _speech = stt.SpeechToText();
+  }
 
   Widget build(BuildContext context) {
-    // ignore: prefer_const_constructors
     return Scaffold(
         // backgroundColor: const Color(0xFF0D0D17),
         body: SingleChildScrollView(
@@ -29,58 +38,28 @@ class _PredictionState extends State<PredictionPage> {
             borderRadius: BorderRadius.circular(20)),
         child: Column(
           children: <Widget>[
-            const SizedBox(height: 10),
-            const Text(
-              'GENERACION DE SUGERENCIA',
-              style: TextStyle(
-                  fontSize: 20, color: Colors.black, fontFamily: 'Dosis'),
-            ),
-            Padding(
-              padding: EdgeInsets.all(16.0),
-              child: TextFormField(
-                textCapitalization: TextCapitalization.words,
-                decoration: const InputDecoration(
-                  border: UnderlineInputBorder(),
-                  enabled: true,
-                  filled: true,
-                  labelText: 'TRANSCRIPCION DEL SISTEMA',
-                ),
+            TextField(
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: _text,
+                enabled: false,
               ),
             ),
-            Padding(
-              padding: EdgeInsets.all(16.0),
-              child: TextFormField(
-                textCapitalization: TextCapitalization.words,
-                initialValue: "Dog",
-                decoration: const InputDecoration(
-                  border: UnderlineInputBorder(),
-                  enabled: true,
-                  filled: true,
-                  labelText: 'SUGERENCIA DEL SISTEMA',
-                ),
+            SizedBox(height: 10),
+            TextField(
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Prediccion',
+                enabled: false,
               ),
             ),
             const SizedBox(height: 10),
             ElevatedButton.icon(
               style: ElevatedButton.styleFrom(
-                  minimumSize: Size(175, 50),
-                  primary: escuchando ? Colors.red : Color(0xFF476BF6),
-                  onPrimary: Colors.black),
-              onPressed: () {},
-              icon: Icon(escuchando ? Icons.stop : Icons.mic, size: 30),
-              label: Text(
-                escuchando ? 'DETENER' : 'INICIAR',
-                style: TextStyle(fontSize: 25, fontFamily: 'Dosis'),
+                minimumSize: Size(175, 50),
+                primary: escuchando ? Colors.red : colorPrimario,
               ),
-            ),
-            ElevatedButton.icon(
-              style: ElevatedButton.styleFrom(
-                  minimumSize: Size(175, 50),
-                  primary: escuchando ? Colors.red : Color(0xFF476BF6),
-                  onPrimary: Colors.black),
-              onPressed: () {
-                reproducirPalabra();
-              },
+              onPressed: _listen,
               icon: Icon(escuchando ? Icons.stop : Icons.mic, size: 30),
               label: Text(
                 escuchando ? 'DETENER' : 'ESCUCHAR',
@@ -93,12 +72,12 @@ class _PredictionState extends State<PredictionPage> {
     ));
   }
 
-  Future<void> reproducirPalabra() async {
+  Future<void> reproducirPalabra(String palabra) async {
     FlutterTts flutterTts = FlutterTts();
-    var result = await flutterTts.speak("Dog");
+    var result = await flutterTts.speak(palabra);
     List<dynamic> languages = await flutterTts.getLanguages;
 
-    await flutterTts.setLanguage("en-US");
+    await flutterTts.setLanguage("es-MX");
 
     await flutterTts.setSpeechRate(0.3);
 
@@ -106,6 +85,29 @@ class _PredictionState extends State<PredictionPage> {
 
     await flutterTts.setPitch(0.5);
 
-    await flutterTts.isLanguageAvailable("en-US");
+    await flutterTts.isLanguageAvailable("es-MX");
+  }
+
+  void _listen() async {
+    if (!escuchando) {
+      bool available = await _speech.initialize(
+        onStatus: (val) => print('onStatus: $val'),
+        onError: (val) => print('onError: $val'),
+      );
+      if (available) {
+        setState(() => escuchando = false);
+        _speech.listen(
+          onResult: (val) => setState(() {
+            _text = val.recognizedWords;
+            reproducirPalabra(_text);
+          }),
+        );
+      }
+    }
+  }
+
+  void _stopListen() async {
+    setState(() => escuchando = false);
+    _speech.stop();
   }
 }
