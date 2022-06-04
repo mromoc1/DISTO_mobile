@@ -28,14 +28,10 @@ class _PredictionState extends State<PredictionPage> {
 
   Widget build(BuildContext context) {
     return Scaffold(
-        // backgroundColor: const Color(0xFF0D0D17),
         body: SingleChildScrollView(
       child: Container(
         alignment: Alignment.center,
         margin: EdgeInsets.all(25),
-        decoration: BoxDecoration(
-            // color: const Color(0xFF14141E),
-            borderRadius: BorderRadius.circular(20)),
         child: Column(
           children: <Widget>[
             TextField(
@@ -43,6 +39,14 @@ class _PredictionState extends State<PredictionPage> {
                 border: OutlineInputBorder(),
                 labelText: _text,
                 enabled: false,
+              ),
+            ),
+            Text(
+              '00:00:00',
+              style: TextStyle(
+                fontFamily: 'Montserrat',
+                fontSize: 50,
+                fontWeight: FontWeight.w900,
               ),
             ),
             SizedBox(height: 10),
@@ -53,17 +57,39 @@ class _PredictionState extends State<PredictionPage> {
                 enabled: false,
               ),
             ),
-            const SizedBox(height: 10),
-            ElevatedButton.icon(
-              style: ElevatedButton.styleFrom(
-                minimumSize: Size(175, 50),
-                primary: escuchando ? Colors.red : colorPrimario,
-              ),
-              onPressed: _listen,
-              icon: Icon(escuchando ? Icons.stop : Icons.mic, size: 30),
-              label: Text(
-                escuchando ? 'DETENER' : 'ESCUCHAR',
-                style: TextStyle(fontSize: 25, fontFamily: 'Dosis'),
+            Padding(
+              padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 0),
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton.icon(
+                    label: Text(
+                      'INICIAR',
+                      style: TextStyle(fontSize: 25, fontFamily: 'Dosis'),
+                    ),
+                    icon: Icon(Icons.play_circle, size: 25),
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: Size(140, 40),
+                      primary: Color.fromARGB(255, 7, 92, 11),
+                    ),
+                    onPressed: () {
+                      _listen();
+                    },
+                  ),
+                  ElevatedButton.icon(
+                    label: Text(
+                      'DETENER',
+                      style: TextStyle(fontSize: 25, fontFamily: 'Dosis'),
+                    ),
+                    icon: Icon(Icons.stop_circle, size: 25),
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: Size(140, 40),
+                      primary: Color.fromARGB(255, 92, 7, 7),
+                    ),
+                    onPressed: () {},
+                  ),
+                ],
               ),
             ),
           ],
@@ -73,18 +99,15 @@ class _PredictionState extends State<PredictionPage> {
   }
 
   Future<void> reproducirPalabra(String palabra) async {
+    print(palabra);
     FlutterTts flutterTts = FlutterTts();
     var result = await flutterTts.speak(palabra);
     List<dynamic> languages = await flutterTts.getLanguages;
 
     await flutterTts.setLanguage("es-MX");
-
     await flutterTts.setSpeechRate(0.3);
-
     await flutterTts.setVolume(1.0);
-
     await flutterTts.setPitch(0.5);
-
     await flutterTts.isLanguageAvailable("es-MX");
   }
 
@@ -99,6 +122,7 @@ class _PredictionState extends State<PredictionPage> {
         _speech.listen(
           onResult: (val) => setState(() {
             _text = val.recognizedWords;
+
             final splitted = _text.split(' ');
             reproducirPalabra(splitted[splitted.length - 1]);
           }),
