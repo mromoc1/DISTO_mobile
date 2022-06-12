@@ -16,8 +16,7 @@ class PredictionPage extends StatefulWidget {
 class _PredictionState extends State<PredictionPage> {
   final sugerenciaController = TextEditingController();
   late stt.SpeechToText _speech;
-
-  bool escuchando = false;
+  bool _isListening = false;
   String _text = 'Transcripcion';
 
   @override
@@ -57,41 +56,13 @@ class _PredictionState extends State<PredictionPage> {
                 enabled: false,
               ),
             ),
-            Padding(
-              padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 0),
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  ElevatedButton.icon(
-                    label: Text(
-                      'INICIAR',
-                      style: TextStyle(fontSize: 25, fontFamily: 'Dosis'),
-                    ),
-                    icon: Icon(Icons.play_circle, size: 25),
-                    style: ElevatedButton.styleFrom(
-                      minimumSize: Size(140, 40),
-                      primary: Color.fromARGB(255, 7, 92, 11),
-                    ),
-                    onPressed: () {
-                      _listen();
-                    },
-                  ),
-                  ElevatedButton.icon(
-                    label: Text(
-                      'DETENER',
-                      style: TextStyle(fontSize: 25, fontFamily: 'Dosis'),
-                    ),
-                    icon: Icon(Icons.stop_circle, size: 25),
-                    style: ElevatedButton.styleFrom(
-                      minimumSize: Size(140, 40),
-                      primary: Color.fromARGB(255, 92, 7, 7),
-                    ),
-                    onPressed: () {},
-                  ),
-                ],
-              ),
-            ),
+            SizedBox(height: 10),
+            IconButton(
+              onPressed: _listen, 
+              icon: Icon(_isListening ? Icons.stop_rounded : Icons.play_arrow_rounded),
+              iconSize: 70,
+              color: _isListening ? Color.fromARGB(255, 103, 36, 36) : Color(0xFF243B67) ,
+            )
           ],
         ),
       ),
@@ -111,28 +82,26 @@ class _PredictionState extends State<PredictionPage> {
     await flutterTts.isLanguageAvailable("es-MX");
   }
 
-  void _listen() async {
-    if (!escuchando) {
+   void _listen() async {
+    if (!_isListening) {
       bool available = await _speech.initialize(
         onStatus: (val) => print('onStatus: $val'),
         onError: (val) => print('onError: $val'),
       );
       if (available) {
-        setState(() => escuchando = false);
+        setState(() => _isListening = true);
         _speech.listen(
           onResult: (val) => setState(() {
             _text = val.recognizedWords;
-
             final splitted = _text.split(' ');
-            reproducirPalabra(splitted[splitted.length - 1]);
+            _text = splitted.last;
+            print(_text); //text esta repitiendo
           }),
         );
       }
+    } else {
+      setState(() => _isListening = false);
+      _speech.stop();
     }
-  }
-
-  void _stopListen() async {
-    setState(() => escuchando = false);
-    _speech.stop();
   }
 }

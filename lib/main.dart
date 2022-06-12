@@ -41,6 +41,7 @@ class _InicioState extends State<Inicio> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBody: true,
       appBar: AppBar(
         backgroundColor: colorPrimario,
         title: Center(
@@ -59,12 +60,12 @@ class _InicioState extends State<Inicio> {
         height: 50.0,
         items: const <Widget>[
           Icon(
-            Icons.home,
+            Icons.home_rounded,
             size: 40,
             color: colorSecundario,
           ),
           Icon(
-            Icons.mic,
+            Icons.graphic_eq_rounded,
             size: 40,
             color: colorSecundario,
           ),
