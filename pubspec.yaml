@@ -41,6 +41,7 @@ dependencies:
   http:
   curved_navigation_bar: ^1.0.3
   speech_to_text: ^5.5.0
+  sqflite: ^2.0.2+1
 
 dev_dependencies:
   flutter_test:

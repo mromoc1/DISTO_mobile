@@ -1,13 +1,37 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+import 'package:app/database/palabras.dart';
 import 'package:flutter/material.dart';
 
-class BookPage extends StatelessWidget {
+import '../database/database.dart';
+
+class BookPage extends StatefulWidget {
   const BookPage({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-          body: SingleChildScrollView(
+  State<BookPage> createState() => _BookState();
+}
+
+class _BookState extends State<BookPage> {
+  List<Palabra> Lp = [];
+
+  cargarPalabras() async {
+    List<Palabra> auxLp = await DB.obtenerPalabras();
+    setState(() {
+      Lp = auxLp;
+    });
+  }
+
+  @override
+  void initState() {
+    cargarPalabras();
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: SingleChildScrollView(
         child: Container(
             alignment: Alignment.center,
             margin: EdgeInsets.all(10),
@@ -22,9 +46,40 @@ class BookPage extends StatelessWidget {
                     suffixIcon: Icon(Icons.search),
                   ),
                 ),
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    IconButton(
+                      onPressed: () {},
+                      icon: Icon(
+                        Icons.search_rounded,
+                        color: Colors.black,
+                      ),
+                      iconSize: 35,
+                    ),
+                    IconButton(
+                      onPressed: () {},
+                      icon: Icon(
+                        Icons.add_circle_outline,
+                        color: Color.fromARGB(255, 45, 17, 170),
+                      ),
+                      iconSize: 35,
+                    ),
+                    IconButton(
+                      onPressed: () {},
+                      icon: Icon(
+                        Icons.delete_rounded,
+                        color: Color.fromARGB(255, 173, 12, 0),
+                      ),
+                      iconSize: 35,
+                    ),
+                  ],
+                ),
+                SizedBox(height: 10),
                 DataTable(columns: [
                   DataColumn(
-                    label: Text('PALABRAS ALMACENADAS',
+                    label: Text('PALABRAS PROBLEMATICAS',
                         style: TextStyle(fontSize: 16, fontFamily: 'Dosis')),
                   ),
                 ], rows: [
@@ -119,5 +174,7 @@ class BookPage extends StatelessWidget {
                 ])
               ],
             )),
-      ));
+      ),
+    );
+  }
 }
