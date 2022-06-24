@@ -1,4 +1,4 @@
-// ignore_for_file: camel_case_types
+// ignore_for_file: camel_case_types, prefer_const_constructors, prefer_const_constructors_in_immutables
 
 import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
@@ -42,15 +42,18 @@ class _InicioState extends State<Inicio> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBody: true,
       appBar: AppBar(
         backgroundColor: colorPrimario,
         title: Center(
           child: Text(
-            ' DISTO ',
+            'DISTO MOBILE',
             style: TextStyle(
                 fontSize: 30, color: colorTexto1, fontFamily: 'Bungee'),
           ),
         ),
+        actions: [IconButton(onPressed: () {}, icon: Icon(Icons.settings))],
+        leading: Icon(Icons.menu),
       ),
       bottomNavigationBar: CurvedNavigationBar(
         key: _bottomNavigationKey,
@@ -58,12 +61,12 @@ class _InicioState extends State<Inicio> {
         height: 50.0,
         items: const <Widget>[
           Icon(
-            Icons.home,
+            Icons.home_rounded,
             size: 40,
             color: colorSecundario,
           ),
           Icon(
-            Icons.mic,
+            Icons.graphic_eq_rounded,
             size: 40,
             color: colorSecundario,
           ),

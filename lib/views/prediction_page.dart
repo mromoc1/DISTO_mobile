@@ -25,11 +25,15 @@ class PredictionPage extends StatefulWidget {
 class _PredictionState extends State<PredictionPage> {
   final sugerenciaController = TextEditingController();
   late stt.SpeechToText _speech;
+<<<<<<< HEAD
   String url = "";
   var Data;
   String QueryText = 'Prediccion';
 
   bool escuchando = false;
+=======
+  bool _isListening = false;
+>>>>>>> 4ade504e25a464a486a2b7cd7736102151087ee7
   String _text = 'Transcripcion';
 
   @override
@@ -42,14 +46,10 @@ class _PredictionState extends State<PredictionPage> {
     //Python pythonScript = Python();
     //String pythonCodeResult = "";
     return Scaffold(
-        // backgroundColor: const Color(0xFF0D0D17),
         body: SingleChildScrollView(
       child: Container(
         alignment: Alignment.center,
         margin: EdgeInsets.all(25),
-        decoration: BoxDecoration(
-            // color: const Color(0xFF14141E),
-            borderRadius: BorderRadius.circular(20)),
         child: Column(
           children: <Widget>[
             TextField(
@@ -57,6 +57,14 @@ class _PredictionState extends State<PredictionPage> {
                 border: OutlineInputBorder(),
                 labelText: _text,
                 enabled: false,
+              ),
+            ),
+            Text(
+              '00:00:00',
+              style: TextStyle(
+                fontFamily: 'Montserrat',
+                fontSize: 50,
+                fontWeight: FontWeight.w900,
               ),
             ),
             SizedBox(height: 10),
@@ -67,6 +75,7 @@ class _PredictionState extends State<PredictionPage> {
                 enabled: false,
               ),
             ),
+<<<<<<< HEAD
             const SizedBox(height: 10),
             ElevatedButton.icon(
               style: ElevatedButton.styleFrom(
@@ -94,6 +103,15 @@ class _PredictionState extends State<PredictionPage> {
                 style: TextStyle(fontSize: 25, fontFamily: 'Dosis'),
               ),
             ),
+=======
+            SizedBox(height: 10),
+            IconButton(
+              onPressed: _listen, 
+              icon: Icon(_isListening ? Icons.stop_rounded : Icons.play_arrow_rounded),
+              iconSize: 70,
+              color: _isListening ? Color.fromARGB(255, 103, 36, 36) : Color(0xFF243B67) ,
+            )
+>>>>>>> 4ade504e25a464a486a2b7cd7736102151087ee7
           ],
         ),
       ),
@@ -101,35 +119,33 @@ class _PredictionState extends State<PredictionPage> {
   }
 
   Future<void> reproducirPalabra(String palabra) async {
+    print(palabra);
     FlutterTts flutterTts = FlutterTts();
     var result = await flutterTts.speak(palabra);
     List<dynamic> languages = await flutterTts.getLanguages;
 
     await flutterTts.setLanguage("es-MX");
-
     await flutterTts.setSpeechRate(0.3);
-
     await flutterTts.setVolume(1.0);
-
     await flutterTts.setPitch(0.5);
-
     await flutterTts.isLanguageAvailable("es-MX");
   }
 
-  void _listen() async {
-    if (!escuchando) {
+   void _listen() async {
+    if (!_isListening) {
       bool available = await _speech.initialize(
         onStatus: (val) => print('onStatus: $val'),
         onError: (val) => print('onError: $val'),
       );
       if (available) {
-        setState(() => escuchando = false);
+        setState(() => _isListening = true);
         _speech.listen(
           onResult: (val) => setState(() async {
             _text = "";
             _text = val.recognizedWords;
             print('TEXTO A IMPRIMIR' + _text);
             final splitted = _text.split(' ');
+<<<<<<< HEAD
             print('PALABRA A SOLICITAR PARA REPRODUCCION' +
                 splitted[splitted.length - 1]);
             url = 'http://127.0.0.1:5000/api?Query=' +
@@ -141,14 +157,16 @@ class _PredictionState extends State<PredictionPage> {
 
             //reproducirPalabra(splitted[splitted.length - 1]);
             reproducirPalabra(QueryText);
+=======
+            _text = splitted.last;
+            print(_text); //text esta repitiendo
+>>>>>>> 4ade504e25a464a486a2b7cd7736102151087ee7
           }),
         );
       }
+    } else {
+      setState(() => _isListening = false);
+      _speech.stop();
     }
-  }
-
-  void _stopListen() async {
-    setState(() => escuchando = false);
-    _speech.stop();
   }
 }
