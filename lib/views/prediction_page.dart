@@ -1,8 +1,5 @@
 // ignore_for_file: prefer_const_constructors, annotate_overrides, prefer_final_fields, unused_local_variable
 
-import 'dart:io';
-
-import 'package:app/API.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
@@ -14,6 +11,7 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'dart:convert';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
+import 'package:app/API.dart';
 
 import '../constants.dart';
 
@@ -45,8 +43,6 @@ class _PredictionState extends State<PredictionPage> {
   String _text = 'Transcripcion';
 
   Widget build(BuildContext context) {
-    //Python pythonScript = Python();
-    //String pythonCodeResult = "";
     return Scaffold(
         body: SingleChildScrollView(
       child: Container(
@@ -61,6 +57,7 @@ class _PredictionState extends State<PredictionPage> {
                 enabled: false,
               ),
             ),
+            SizedBox(height: 10),
             Text(
               '00:00:00',
               style: TextStyle(
@@ -173,8 +170,7 @@ class _PredictionState extends State<PredictionPage> {
       if (available) {
         setState(() => _isListening = true);
         _speech.listen(
-          onResult: (val) => setState(() async {
-            _text = "";
+          onResult: (val) => setState(() {
             _text = val.recognizedWords;
             // print('TEXTO A IMPRIMIR' + _text);
             final splitted = _text.split(' ');
