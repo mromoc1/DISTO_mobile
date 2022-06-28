@@ -27,7 +27,6 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
-  python:
   flutter:
     sdk: flutter
   flutter_tts:
@@ -42,6 +41,7 @@ dependencies:
   curved_navigation_bar: ^1.0.3
   speech_to_text: ^5.5.0
   sqflite: ^2.0.2+1
+  video_player: ^2.4.5
 
 dev_dependencies:
   flutter_test:
@@ -66,8 +66,7 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  assets:
-    - python/
+
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 
