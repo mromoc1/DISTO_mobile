@@ -1,4 +1,7 @@
-// ignore_for_file: prefer_const_constructors, annotate_overrides, prefer_final_fields, unused_local_variable
+// ignore_for_file: prefer_const_constructors, annotate_overrides, prefer_final_fields, unused_local_variable, avoid_print
+
+import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
@@ -13,14 +16,15 @@ class PredictionPage extends StatefulWidget {
 }
 
 class _PredictionState extends State<PredictionPage> {
-  //PROBANDO PAITON
-  Python pythonScript = Python();
-  String pythonCodeResult = "";
-  //PROBANDO PAITON
+  // //PROBANDO PAITON
+  // Python pythonScript = Python();
+  // String pythonCodeResult = "";
+  // //PROBANDO PAITON
   final sugerenciaController = TextEditingController();
   late stt.SpeechToText _speech;
   bool _isListening = false;
   String _text = 'Transcripcion';
+  String _textPrediction = 'Prediccion';
 
   @override
   void initState() {
@@ -56,7 +60,7 @@ class _PredictionState extends State<PredictionPage> {
             TextField(
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
-                labelText: 'Prediccion',
+                labelText: _textPrediction,
                 enabled: false,
               ),
             ),
@@ -70,19 +74,19 @@ class _PredictionState extends State<PredictionPage> {
                   ? Color.fromARGB(255, 103, 36, 36)
                   : Color(0xFF243B67),
             ),
-            //PROBANDO PAITON
-            TextButton(
-              child: const Text("Execute python code"),
-              onPressed: () async {
-                await pythonScript.execute('lib/holaMundo.py').then((result) {
-                  setState(() {
-                    pythonCodeResult = result;
-                  });
-                });
-              },
-            ),
-            Text(pythonCodeResult),
-            //PROBANDO PAITON
+            // //PROBANDO PAITON
+            // TextButton(
+            //   child: const Text("Execute python code"),
+            //   onPressed: () async {
+            //     await pythonScript.execute('lib/holaMundo.py').then((result) {
+            //       setState(() {
+            //         pythonCodeResult = result;
+            //       });
+            //     });
+            //   },
+            // ),
+            // Text(pythonCodeResult),
+            // //PROBANDO PAITON
           ],
         ),
       ),
@@ -109,6 +113,19 @@ class _PredictionState extends State<PredictionPage> {
         onError: (val) => print('onError: $val'),
       );
       if (available) {
+        final socket = await Socket.connect('54.233.112.205', 9999);
+        socket.listen(
+          // handle data from the server
+          (Uint8List data) {
+            final serverResponse = String.fromCharCodes(data);
+            print('Server: $serverResponse');
+            _textPrediction = serverResponse;
+          },
+          onDone: () {
+            print('Server left.');
+            socket.destroy();
+          },
+        );
         setState(() => _isListening = true);
         _speech.listen(
           onResult: (val) => setState(() {
@@ -116,6 +133,7 @@ class _PredictionState extends State<PredictionPage> {
             final splitted = _text.split(' ');
             _text = splitted.last;
             print(_text); //text esta repitiendo
+            socket.write(_text);
           }),
         );
       }
