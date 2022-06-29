@@ -40,12 +40,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   http:
   curved_navigation_bar: ^1.0.3
-<<<<<<< HEAD
   speech_to_text: ^5.6.0
-=======
-  speech_to_text: ^5.5.0
-  sqflite: ^2.0.2+1
->>>>>>> 36625aec33b0155f71eb47a6d1adcabcf8dd6f9a
 
 dev_dependencies:
   flutter_test:

@@ -15,18 +15,18 @@ class BookPage extends StatefulWidget {
 class _BookState extends State<BookPage> {
   List<Palabra> Lp = [];
 
-  cargarPalabras() async {
-    List<Palabra> auxLp = await DB.obtenerPalabras();
-    setState(() {
-      Lp = auxLp;
-    });
-  }
+  // cargarPalabras() async {
+  //   List<Palabra> auxLp = await DB.obtenerPalabras();
+  //   setState(() {
+  //     Lp = auxLp;
+  //   });
+  // }
 
-  @override
-  void initState() {
-    cargarPalabras();
-    super.initState();
-  }
+  // @override
+  // void initState() {
+  //   cargarPalabras();
+  //   super.initState();
+  // }
 
   @override
   Widget build(BuildContext context) {
