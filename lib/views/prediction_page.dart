@@ -106,25 +106,24 @@ class _PredictionState extends State<PredictionPage> {
   }
 
   void _listen() async {
+    final socket = await Socket.connect('15.228.98.225', 9999);
+    socket.listen(
+      (Uint8List data) {
+        final serverResponse = String.fromCharCodes(data);
+        print('Server: $serverResponse');
+        _textPrediction = serverResponse;
+      },
+      onDone: () {
+        print('Server left.');
+        socket.destroy();
+      },
+    );
     if (!_isListening) {
       bool available = await _speech.initialize(
         onStatus: (val) => print('onStatus: $val'),
         onError: (val) => print('onError: $val'),
       );
       if (available) {
-        final socket = await Socket.connect('54.233.112.205', 9999);
-        socket.listen(
-          // handle data from the server
-          (Uint8List data) {
-            final serverResponse = String.fromCharCodes(data);
-            print('Server: $serverResponse');
-            _textPrediction = serverResponse;
-          },
-          onDone: () {
-            print('Server left.');
-            socket.destroy();
-          },
-        );
         setState(() => _isListening = true);
         _speech.listen(
           onResult: (val) => setState(() {
@@ -132,12 +131,12 @@ class _PredictionState extends State<PredictionPage> {
             final splitted = _text.split(' ');
             _text = splitted.last;
             print(_text); //text esta repitiendo
-            socket.write(_text);
           }),
         );
       }
     } else {
       setState(() => _isListening = false);
+      socket.write(_text);
       _speech.stop();
     }
   }
