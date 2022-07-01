@@ -3,10 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
-import 'package:python/python.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
-import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'dart:convert';
 import 'package:speech_to_text/speech_recognition_result.dart';
@@ -164,7 +160,7 @@ class _PredictionState extends State<PredictionPage> {
   }
 
   void solicitud(String texto) async {
-    final socket = await Socket.connect('15.228.98.225', 9999);
+    final socket = await Socket.connect('54.232.247.4', 9999);
     socket.listen(
       (Uint8List data) {
         final serverResponse = String.fromCharCodes(data);
