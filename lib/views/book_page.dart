@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+import 'dart:ui';
+
 import 'package:app/database/palabras.dart';
 import 'package:flutter/material.dart';
 
@@ -13,20 +15,20 @@ class BookPage extends StatefulWidget {
 }
 
 class _BookState extends State<BookPage> {
+  final palabraTextField = TextEditingController();
   List<Palabra> Lp = [];
+  Future<void> cargarPalabras() async {
+    var lista = await DB.instance.getPalabras();
+    setState(() => Lp = lista);
+  }
 
-  // cargarPalabras() async {
-  //   List<Palabra> auxLp = await DB.obtenerPalabras();
-  //   setState(() {
-  //     Lp = auxLp;
-  //   });
-  // }
-
-  // @override
-  // void initState() {
-  //   cargarPalabras();
-  //   super.initState();
-  // }
+  @override
+  void initState() {
+    setState(() {
+      cargarPalabras();
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,13 +39,20 @@ class _BookState extends State<BookPage> {
             margin: EdgeInsets.all(10),
             child: Column(
               children: <Widget>[
+                SizedBox(height: 10),
                 TextField(
+                  controller: palabraTextField,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(25.0),
+                      borderRadius: BorderRadius.circular(10.0),
                     ),
-                    labelText: 'Buscar...',
+                    // labelText: 'Buscar...',
+                    hintText: 'Buscar...',
                     suffixIcon: Icon(Icons.search),
+                  ),
+                  style: TextStyle(
+                    fontFamily: 'Dosis',
+                    fontSize: 25,
                   ),
                 ),
                 Row(
@@ -51,127 +60,57 @@ class _BookState extends State<BookPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     IconButton(
-                      onPressed: () {},
-                      icon: Icon(
-                        Icons.search_rounded,
-                        color: Colors.black,
-                      ),
-                      iconSize: 35,
-                    ),
-                    IconButton(
-                      onPressed: () {},
+                      onPressed: () async {
+                        if (palabraTextField.text.isNotEmpty) {
+                          print(palabraTextField.text);
+                          DB.instance.addPalabra(Palabra(
+                            palabra: palabraTextField.text,
+                          ));
+                          palabraTextField.text = "";
+                          initState();
+                        }
+                      },
                       icon: Icon(
                         Icons.add_circle_outline,
                         color: Color.fromARGB(255, 45, 17, 170),
                       ),
                       iconSize: 35,
                     ),
-                    IconButton(
-                      onPressed: () {},
-                      icon: Icon(
-                        Icons.delete_rounded,
-                        color: Color.fromARGB(255, 173, 12, 0),
-                      ),
-                      iconSize: 35,
-                    ),
                   ],
                 ),
                 SizedBox(height: 10),
-                DataTable(columns: [
-                  DataColumn(
-                    label: Text('PALABRAS PROBLEMATICAS',
-                        style: TextStyle(fontSize: 16, fontFamily: 'Dosis')),
-                  ),
-                ], rows: [
-                  DataRow(cells: [
-                    DataCell(Text('Palabra 1',
-                        style: TextStyle(fontSize: 14, fontFamily: 'Dosis')))
-                  ]),
-                  DataRow(cells: [
-                    DataCell(Text('Palabra 2',
-                        style: TextStyle(fontSize: 14, fontFamily: 'Dosis')))
-                  ]),
-                  DataRow(cells: [
-                    DataCell(Text('Palabra 3',
-                        style: TextStyle(fontSize: 14, fontFamily: 'Dosis')))
-                  ]),
-                  DataRow(cells: [
-                    DataCell(Text('Palabra 4',
-                        style: TextStyle(fontSize: 14, fontFamily: 'Dosis')))
-                  ]),
-                  DataRow(cells: [
-                    DataCell(Text('Palabra 5',
-                        style: TextStyle(fontSize: 14, fontFamily: 'Dosis')))
-                  ]),
-                  DataRow(cells: [
-                    DataCell(Text('Palabra 6',
-                        style: TextStyle(fontSize: 14, fontFamily: 'Dosis')))
-                  ]),
-                  DataRow(cells: [
-                    DataCell(Text('Palabra 7',
-                        style: TextStyle(fontSize: 14, fontFamily: 'Dosis')))
-                  ]),
-                  DataRow(cells: [
-                    DataCell(Text('Palabra 8',
-                        style: TextStyle(fontSize: 14, fontFamily: 'Dosis')))
-                  ]),
-                  DataRow(cells: [
-                    DataCell(Text('Palabra 9',
-                        style: TextStyle(fontSize: 14, fontFamily: 'Dosis')))
-                  ]),
-                  DataRow(cells: [
-                    DataCell(Text('Palabra 10',
-                        style: TextStyle(fontSize: 14, fontFamily: 'Dosis')))
-                  ]),
-                  DataRow(cells: [
-                    DataCell(Text('Palabra 11',
-                        style: TextStyle(fontSize: 14, fontFamily: 'Dosis')))
-                  ]),
-                  DataRow(cells: [
-                    DataCell(Text('Palabra 12',
-                        style: TextStyle(fontSize: 14, fontFamily: 'Dosis')))
-                  ]),
-                  DataRow(cells: [
-                    DataCell(Text('Palabra 13',
-                        style: TextStyle(fontSize: 14, fontFamily: 'Dosis')))
-                  ]),
-                  DataRow(cells: [
-                    DataCell(Text('Palabra 14',
-                        style: TextStyle(fontSize: 14, fontFamily: 'Dosis')))
-                  ]),
-                  DataRow(cells: [
-                    DataCell(Text('Palabra 15',
-                        style: TextStyle(fontSize: 14, fontFamily: 'Dosis')))
-                  ]),
-                  DataRow(cells: [
-                    DataCell(Text('Palabra 16',
-                        style: TextStyle(fontSize: 14, fontFamily: 'Dosis')))
-                  ]),
-                  DataRow(cells: [
-                    DataCell(Text('Palabra 16',
-                        style: TextStyle(fontSize: 14, fontFamily: 'Dosis')))
-                  ]),
-                  DataRow(cells: [
-                    DataCell(Text('Palabra 17',
-                        style: TextStyle(fontSize: 14, fontFamily: 'Dosis')))
-                  ]),
-                  DataRow(cells: [
-                    DataCell(Text('Palabra 18',
-                        style: TextStyle(fontSize: 14, fontFamily: 'Dosis')))
-                  ]),
-                  DataRow(cells: [
-                    DataCell(Text('Palabra 19',
-                        style: TextStyle(fontSize: 14, fontFamily: 'Dosis')))
-                  ]),
-                  DataRow(cells: [
-                    DataCell(Text('Palabra 20',
-                        style: TextStyle(fontSize: 14, fontFamily: 'Dosis')))
-                  ]),
-                  DataRow(cells: [
-                    DataCell(Text('Palabra 21',
-                        style: TextStyle(fontSize: 14, fontFamily: 'Dosis')))
-                  ]),
-                ])
+                DataTable(
+                  columns: [
+                    DataColumn(
+                      label: Text("ID",
+                          style: TextStyle(fontSize: 25, fontFamily: 'Dosis')),
+                    ),
+                    DataColumn(
+                        label: Text("PALABRA",
+                            style:
+                                TextStyle(fontSize: 25, fontFamily: 'Dosis'))),
+                    DataColumn(
+                        label: Text("ELIMINAR",
+                            style:
+                                TextStyle(fontSize: 25, fontFamily: 'Dosis'))),
+                  ],
+                  rows: Lp.map<DataRow>((item) => DataRow(cells: [
+                        DataCell(Text(item.id.toString(),
+                            style:
+                                TextStyle(fontSize: 20, fontFamily: 'Dosis'))),
+                        DataCell(Text(item.palabra.toString(),
+                            style:
+                                TextStyle(fontSize: 20, fontFamily: 'Dosis'))),
+                        DataCell(IconButton(
+                            onPressed: () async {
+                              DB.instance.removePalabra(item);
+                              palabraTextField.text = "";
+                              initState();
+                            },
+                            icon: Icon(Icons.delete,
+                                color: Color.fromARGB(255, 173, 12, 0))))
+                      ])).toList(),
+                )
               ],
             )),
       ),

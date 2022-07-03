@@ -1,17 +1,17 @@
 class Palabra {
-  int id;
+  int? id;
   String palabra;
 
   Palabra({
-    required this.id,
+    this.id,
     required this.palabra,
   });
 
-  factory Palabra.fromJson(Map<String, dynamic> json) => Palabra(
+  factory Palabra.fromMap(Map<String, dynamic> json) => Palabra(
         id: json['id'],
         palabra: json['palabra'],
       );
   Map<String, dynamic> toMap() {
-    return {"id": id, "palabra": palabra};
+    return {"palabra": palabra};
   }
 }
