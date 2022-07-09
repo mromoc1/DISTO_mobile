@@ -2,6 +2,7 @@
 
 import 'dart:ui';
 
+import 'package:app/constants.dart';
 import 'package:app/database/palabras.dart';
 import 'package:flutter/material.dart';
 
@@ -39,68 +40,45 @@ class _BookState extends State<BookPage> {
             margin: EdgeInsets.all(10),
             child: Column(
               children: <Widget>[
-                SizedBox(height: 10),
+                SizedBox(height: 30),
                 TextField(
                   controller: palabraTextField,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
-                    // labelText: 'Buscar...',
-                    hintText: 'Buscar...',
-                    suffixIcon: Icon(Icons.search),
+                    hintText: 'Pulsa enter para agregar',
+                    labelText: 'AGREGAR NUEVA PALABRA',
+                    suffixIcon: Icon(Icons.add_circle_outline),
                   ),
-                  style: TextStyle(
-                    fontFamily: 'Dosis',
-                    fontSize: 25,
-                  ),
-                ),
-                Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    IconButton(
-                      onPressed: () async {
-                        if (palabraTextField.text.isNotEmpty) {
-                          print(palabraTextField.text);
-                          DB.instance.addPalabra(Palabra(
-                            palabra: palabraTextField.text,
-                          ));
-                          palabraTextField.text = "";
-                          initState();
-                        }
-                      },
-                      icon: Icon(
-                        Icons.add_circle_outline,
-                        color: Color.fromARGB(255, 45, 17, 170),
-                      ),
-                      iconSize: 35,
-                    ),
-                  ],
+                  style: fuente_montserrat_diagonal_18,
+                  onSubmitted: (value) async {
+                    if (palabraTextField.text.isNotEmpty) {
+                      print(palabraTextField.text);
+                      DB.instance.addPalabra(Palabra(
+                        palabra: palabraTextField.text,
+                      ));
+                      palabraTextField.text = "";
+                      initState();
+                    }
+                  },
                 ),
                 SizedBox(height: 10),
                 DataTable(
                   columns: [
                     DataColumn(
-                      label: Text("ID",
-                          style: TextStyle(fontSize: 25, fontFamily: 'Dosis')),
+                      label: Text("ID", style: fuente_montserrat_20),
                     ),
                     DataColumn(
-                        label: Text("PALABRA",
-                            style:
-                                TextStyle(fontSize: 25, fontFamily: 'Dosis'))),
+                        label: Text("PALABRA", style: fuente_montserrat_20)),
                     DataColumn(
-                        label: Text("ELIMINAR",
-                            style:
-                                TextStyle(fontSize: 25, fontFamily: 'Dosis'))),
+                        label: Text("ELIMINAR", style: fuente_montserrat_20)),
                   ],
                   rows: Lp.map<DataRow>((item) => DataRow(cells: [
                         DataCell(Text(item.id.toString(),
-                            style:
-                                TextStyle(fontSize: 20, fontFamily: 'Dosis'))),
+                            style: fuente_montserrat_20)),
                         DataCell(Text(item.palabra.toString(),
-                            style:
-                                TextStyle(fontSize: 20, fontFamily: 'Dosis'))),
+                            style: fuente_montserrat_20)),
                         DataCell(IconButton(
                             onPressed: () async {
                               DB.instance.removePalabra(item);

@@ -90,6 +90,12 @@ flutter:
     - family: monoton
       fonts:
         - asset: fonts/Monoton-Regular.ttf
+    - family: BhuTuka
+      fonts:
+        - asset: fonts/BhuTukaExpandedOne-Regular.ttf
+    - family: Bevan
+      fonts:
+        - asset: fonts/Bevan-Regular.ttf
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
   #   - family: Trajan Pro

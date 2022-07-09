@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
+import 'package:app/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
@@ -28,42 +29,55 @@ class _HomeState extends State<HomePage> {
       body: SingleChildScrollView(
         child: Container(
             alignment: Alignment.topCenter,
-            padding: const EdgeInsets.all(5),
-            margin: const EdgeInsets.all(20),
-            decoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
+            padding: const EdgeInsets.all(10),
+            margin: const EdgeInsets.all(5),
             child: Column(
               children: <Widget>[
-                _controller.value.isInitialized
-                    ? AspectRatio(
-                        aspectRatio: _controller.value.aspectRatio,
-                        child: VideoPlayer(_controller),
-                      )
-                    : Container(),
-                IconButton(
-                  onPressed: () {
-                    setState(() {
-                      _controller.value.isPlaying
-                          ? _controller.pause()
-                          : _controller.play();
-                    });
-                  },
-                  icon: Icon(_controller.value.isPlaying
-                      ? Icons.stop_rounded
-                      : Icons.play_arrow_rounded),
-                  iconSize: 70,
-                  color: Color(0xFF243B67),
+                Text(
+                  'Que es DISTO',
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                    fontFamily: 'Bevan',
+                    fontSize: 25,
+                    fontWeight: FontWeight.normal,
+                  ),
                 ),
+                Divider(),
+                Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: colorPrimario),
+                    child: Column(
+                      children: <Widget>[
+                        _controller.value.isInitialized
+                            ? AspectRatio(
+                                aspectRatio: _controller.value.aspectRatio,
+                                child: VideoPlayer(_controller),
+                              )
+                            : Container(),
+                        IconButton(
+                          onPressed: () {
+                            setState(() {
+                              _controller.value.isPlaying
+                                  ? _controller.pause()
+                                  : _controller.play();
+                            });
+                          },
+                          icon: Icon(_controller.value.isPlaying
+                              ? Icons.stop_rounded
+                              : Icons.play_arrow_rounded),
+                          iconSize: 70,
+                          color: Colors.white,
+                        ),
+                      ],
+                    )),
                 Padding(
                   padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
                   child: Text(
                     'DISTO es un sistema computacional cuya funcionalidad principal es ayudar a individuos que padecen disfemia tónica. Dicha ayuda consiste en proporcionar un procedimiento que mediante uso de software y hardware permita disminuir a través de la sugerencia de la palabra el tiempo de interrupción o bloqueo generado en una persona con este trastorno del habla (disfemia tónica).',
                     textAlign: TextAlign.justify,
-                    style: TextStyle(
-                      fontFamily: 'Montserrat',
-                      fontSize: 18,
-                      fontWeight: FontWeight.normal,
-                      fontStyle: FontStyle.italic,
-                    ),
+                    style: fuente_montserrat_diagonal_18,
                   ),
                 ),
               ],

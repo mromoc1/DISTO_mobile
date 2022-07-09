@@ -1,5 +1,6 @@
 // ignore_for_file: camel_case_types, prefer_const_constructors, prefer_const_constructors_in_immutables
 
+import 'package:app/views/menulateral_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 
@@ -43,17 +44,17 @@ class _InicioState extends State<Inicio> {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBody: true,
+      drawer: MenuLateral(),
       appBar: AppBar(
         backgroundColor: colorPrimario,
         title: Center(
           child: Text(
-            'DISTO MOBILE',
-            style: TextStyle(
-                fontSize: 30, color: colorTexto1, fontFamily: 'Bungee'),
+            'DISTO',
+            style: fuente_titulo_app_45,
           ),
         ),
         actions: [IconButton(onPressed: () {}, icon: Icon(Icons.settings))],
-        leading: Icon(Icons.menu),
+        // leading: Icon(Icons.menu),
       ),
       bottomNavigationBar: CurvedNavigationBar(
         key: _bottomNavigationKey,

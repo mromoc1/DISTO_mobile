@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, annotate_overrides, prefer_final_fields, unused_local_variable
+// ignore_for_file: prefer_const_constructors, annotate_overrides, prefer_final_fields, unused_local_variable, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
@@ -25,7 +25,6 @@ class _PredictionState extends State<PredictionPage> {
   void initState() {
     super.initState();
     _initSpeech();
-    //solicitud();
   }
 
   SpeechToText _speechToText = SpeechToText();
@@ -33,24 +32,27 @@ class _PredictionState extends State<PredictionPage> {
   late stt.SpeechToText _speech;
   bool _speechEnabled = false;
   String _lastWords = '';
-  String url = "";
-  String texto = "";
-  //final socket = null;
-  var Data;
-  //String QueryText = 'Prediccion';
 
-  bool escuchando = false;
-  bool _isListening = false;
-  String _text = 'Transcripcion';
+  String texto = "";
+  String _text = 'Prediccion del Sistema';
 
   Widget build(BuildContext context) {
     return Scaffold(
         body: SingleChildScrollView(
       child: Container(
-        alignment: Alignment.center,
-        margin: EdgeInsets.all(25),
+        margin: EdgeInsets.all(15),
         child: Column(
           children: <Widget>[
+            Text(
+              'Sugerencia',
+              textAlign: TextAlign.left,
+              style: TextStyle(
+                fontFamily: 'Bevan',
+                fontSize: 25,
+                fontWeight: FontWeight.normal,
+              ),
+            ),
+            Divider(),
             TextField(
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
@@ -58,25 +60,13 @@ class _PredictionState extends State<PredictionPage> {
                 enabled: false,
               ),
             ),
-            SizedBox(height: 10),
-            Text(
-              '00:00:00',
-              style: TextStyle(
-                fontFamily: 'Montserrat',
-                fontSize: 50,
-                fontWeight: FontWeight.w900,
-              ),
-            ),
-            SizedBox(height: 10),
+            SizedBox(height: 20),
             TextField(
               decoration: InputDecoration(
+                enabled: false,
                 border: OutlineInputBorder(),
                 labelText: _speechToText.isListening
                     ? '$_lastWords'
-                    // If listening isn't active but could be tell the user
-                    // how to start it, otherwise indicate that speech
-                    // recognition is not yet ready or not supported on
-                    // the target device
                     : _speechEnabled
                         ? 'Tap the microphone to start listening...'
                         : 'Speech not available',
@@ -86,28 +76,91 @@ class _PredictionState extends State<PredictionPage> {
             ElevatedButton.icon(
               style: ElevatedButton.styleFrom(
                 minimumSize: Size(175, 50),
-                primary: escuchando ? Colors.red : colorPrimario,
+                primary: colorPrimario,
               ),
               onPressed: _speechToText.isNotListening
                   ? _startListening
                   : _stopListening,
-              icon: Icon(escuchando ? Icons.stop : Icons.mic, size: 30),
-              label: Text(
-                escuchando ? 'DETENER' : 'ESCUCHAR',
-                style: TextStyle(fontSize: 25, fontFamily: 'Dosis'),
-              ),
+              icon: Icon(Icons.mic_sharp, size: 30),
+              label: Text('ESCUCHAR', style: fuente_montserrat_15),
             ),
             const SizedBox(height: 10),
             ElevatedButton.icon(
               style: ElevatedButton.styleFrom(
                 minimumSize: Size(175, 50),
-                primary: escuchando ? Colors.red : colorPrimario,
+                primary: colorPrimario,
               ),
               onPressed: ayuda,
-              icon: Icon(escuchando ? Icons.stop : Icons.help, size: 30),
-              label: Text(
-                escuchando ? 'DETENER' : 'AYUDA',
-                style: TextStyle(fontSize: 25, fontFamily: 'Dosis'),
+              icon: Icon(Icons.help, size: 30),
+              label: Text('AYUDA', style: fuente_montserrat_15),
+            ),
+            const SizedBox(height: 25),
+            Text(
+              'Configuracion',
+              textAlign: TextAlign.left,
+              style: TextStyle(
+                fontFamily: 'Bevan',
+                fontSize: 25,
+                fontWeight: FontWeight.normal,
+              ),
+            ),
+            Divider(),
+            Container(
+              padding: const EdgeInsets.all(5),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Column(
+                children: <Widget>[
+                  Text(
+                    'Volumen de la sugerencia: ',
+                    style: fuente_montserrat_diagonal_18,
+                  ),
+                  Slider(
+                    value: volumen,
+                    min: 0,
+                    max: 1,
+                    divisions: 10,
+                    thumbColor: colorPrimario,
+                    activeColor: colorPrimario,
+                    label: "$volumen",
+                    onChanged: (value) {
+                      setState(() => volumen = value);
+                    },
+                  ),
+                  Text(
+                    'Velocidad de la sugerencia: ',
+                    style: fuente_montserrat_diagonal_18,
+                  ),
+                  Slider(
+                    value: velocidad,
+                    min: 0.5,
+                    max: 1,
+                    divisions: 5,
+                    label: "$velocidad",
+                    thumbColor: colorPrimario,
+                    activeColor: colorPrimario,
+                    onChanged: (value) {
+                      setState(() => velocidad = value);
+                    },
+                  ),
+                  Text(
+                    'Tono de la sugerencia: ',
+                    style: fuente_montserrat_diagonal_18,
+                  ),
+                  Slider(
+                    value: tono,
+                    min: 0.5,
+                    max: 2,
+                    divisions: 15,
+                    label: "$tono",
+                    thumbColor: colorPrimario,
+                    activeColor: colorPrimario,
+                    onChanged: (value) {
+                      setState(() => tono = value);
+                    },
+                  ),
+                ],
               ),
             ),
           ],
@@ -123,16 +176,15 @@ class _PredictionState extends State<PredictionPage> {
   }
 
   Future<void> reproducirPalabra(String palabra) async {
-    print(palabra);
     FlutterTts flutterTts = FlutterTts();
+    flutterTts.setLanguage("es-MX");
+    flutterTts.setSpeechRate(velocidad);
+    flutterTts.setVolume(volumen);
+    flutterTts.setPitch(tono);
+    flutterTts.isLanguageAvailable("es-MX");
+
     var result = await flutterTts.speak(palabra);
     List<dynamic> languages = await flutterTts.getLanguages;
-
-    await flutterTts.setLanguage("es-MX");
-    await flutterTts.setSpeechRate(0.1);
-    await flutterTts.setVolume(1.0);
-    await flutterTts.setPitch(0.5);
-    await flutterTts.isLanguageAvailable("es-MX");
   }
 
   /// Each time to start a speech recognition session
